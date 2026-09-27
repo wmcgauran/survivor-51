@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Survivor 51 Draft Board</title>
+<style>
+  :root{
+    --bg:#f6f4ef; --panel:#fffdf8; --ink:#1d1c19; --muted:#6f6a60;
+    --line:#e2ddd2; --accent:#b3541e;
+    --allison:#c2410c; --will:#1d6f63; --mom:#7c3a8d; --dad:#1f5d94;
+    --gone:#b8b2a6;
+  }
+  @media (prefers-color-scheme: dark){
+    :root:not([data-theme="light"]){
+      --bg:#14150f; --panel:#1d1f17; --ink:#f0ede4; --muted:#9a9488;
+      --line:#32352a; --accent:#e08a4e;
+      --allison:#f07a45; --will:#4fb8a4; --mom:#c98ad6; --dad:#5fa4dd;
+      --gone:#5c5a51;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.5 ui-sans-serif,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+    padding:28px 20px 60px}
+  .wrap{max-width:1080px;margin:0 auto}
+  h1{font-size:26px;margin:0 0 2px;letter-spacing:-.02em}
+  .sub{color:var(--muted);font-size:13px;margin:0 0 22px}
+
+  .clock{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+    background:var(--panel);border:1px solid var(--line);border-left:4px solid var(--accent);
+    border-radius:8px;padding:12px 16px;margin-bottom:24px}
+  .clock .lbl{font-size:11px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+  .clock .who{font-size:20px;font-weight:650}
+  .clock .meta{color:var(--muted);font-size:13px}
+
+  .layout{display:grid;grid-template-columns:1fr 340px;gap:24px;align-items:start}
+  @media (max-width:900px){.layout{grid-template-columns:1fr}}
+
+  table{width:100%;border-collapse:collapse;background:var(--panel);
+    border:1px solid var(--line);border-radius:8px;overflow:hidden}
+  th,td{border-bottom:1px solid var(--line);padding:0;text-align:left}
+  thead th{font-size:12px;letter-spacing:.06em;text-transform:uppercase;
+    padding:10px 12px;color:#fff}
+  th.rd{width:54px;background:var(--panel);color:var(--muted)}
+  tbody td{vertical-align:top}
+  tbody tr:last-child td{border-bottom:none}
+  td.rd{padding:12px;color:var(--muted);font-size:12px;font-weight:600;
+    border-right:1px solid var(--line)}
+
+  .cell{padding:10px 12px;min-height:58px;display:flex;flex-direction:column;gap:3px}
+  .pk{font-size:10px;color:var(--muted);letter-spacing:.05em}
+  .name{font-weight:600}
+  .cell.empty .name{color:var(--muted);font-weight:400;font-style:italic}
+  .cell.next{background:color-mix(in srgb,var(--accent) 12%,transparent);
+    box-shadow:inset 0 0 0 2px var(--accent)}
+
+  .pool-head{display:flex;align-items:baseline;justify-content:space-between;
+    gap:10px;margin:0 0 10px}
+  aside h2{font-size:12px;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--muted);margin:0}
+  .count{font-weight:400;color:var(--muted)}
+  button{font:inherit;font-size:12px;padding:4px 10px;border-radius:6px;
+    border:1px solid var(--line);background:var(--panel);color:var(--muted);cursor:pointer}
+  button:hover{color:var(--ink);border-color:var(--muted)}
+  #pool{margin:0;padding:12px 14px;background:var(--panel);
+    border:1px solid var(--line);border-radius:8px;
+    font:inherit;font-size:14px;line-height:1.75;
+    white-space:pre-wrap;overflow-wrap:anywhere;user-select:all}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>Survivor 51 Draft</h1>
+  <p class="sub">Snake draft &middot; 4 drafters &times; 5 rounds &middot; 20 of 21 castaways go</p>
+
+  <div class="clock" id="clock"></div>
+
+  <div class="layout">
+    <div><table id="board"></table></div>
+    <aside>
+      <div class="pool-head">
+        <h2>Still available <span class="count" id="avail-count"></span></h2>
+        <button id="copy">Copy</button>
+      </div>
+      <pre id="pool"></pre>
+    </aside>
+  </div>
+</div>
+
+<script>
+const DRAFTERS = ["Allison","Will","Mom","Dad"];
+const COLORS   = {Allison:"var(--allison)",Will:"var(--will)",Mom:"var(--mom)",Dad:"var(--dad)"};
+const ROUNDS = 5;
+
+const CAST = [
+  ["Aaliyah Puglia","Chef"],
+  ["Alexis Levine","Criminal defense attorney"],
+  ['An "Thien An" Nguyen',"Medical student"],
+  ["Ana Sani","Voice actress"],
+  ['Angelica "Jelly" Loblack',"Sociology professor"],
+  ["Brady Booker","Pro wrestler"],
+  ["Carter Krull","Livestock farmer"],
+  ["Cristian Chavez","Head of HR"],
+  ["Danny Kilby","Game designer"],
+  ["Devin Way","Actor"],
+  ["Eric Macksoud","Mental health counselor"],
+  ["Jenna Doore","Wedding photographer"],
+  ["Kristin Flickinger","Crisis management"],
+  ["Lewis Kelly","Farmer"],
+  ["Linnea Capobianco","Entrepreneur"],
+  ["Maggie Nestor","Farmer"],
+  ["Mike Pinsky","Baseball executive"],
+  ["Ori-Jean Charles","Personal trainer"],
+  ["Patt Cannaday","Federal prosecutor"],
+  ["Rob Antonson","Airline gate agent"],
+  ["Sharonda Cox","Resident, OBGYN"],
+];
+
+// ---- PICKS: keyed by overall pick number (1-20). Fill these in as the draft runs. ----
+const PICKS = {
+  1: 'Angelica "Jelly" Loblack',   // Allison
+  2: "Carter Krull",               // Will
+  3: "Devin Way",                  // Mom
+  4: "Lewis Kelly",                // Dad
+  5: "Patt Cannaday",              // Dad (back-to-back on the turn)
+  6: "Alexis Levine",              // Mom
+  7: "Brady Booker",               // Will
+  8: "Jenna Doore",                // Allison
+  9: "Maggie Nestor",              // Allison (back-to-back on the turn)
+ 10: "Mike Pinsky",                // Will
+ 11: 'An "Thien An" Nguyen',       // Mom
+ 12: "Danny Kilby",                // Dad
+ 13: "Sharonda Cox",               // Dad (back-to-back on the turn)
+ 14: "Rob Antonson",               // Mom
+ 15: "Cristian Chavez",            // Will
+ 16: "Ana Sani",                   // Allison
+ 17: "Eric Macksoud",              // Allison (back-to-back on the turn)
+ 18: "Kristin Flickinger",         // Will
+ 19: "Ori-Jean Charles",           // Mom
+ 20: "Linnea Capobianco",          // Dad
+};
+
+// snake order: pick number -> drafter
+const order = [];
+for (let r = 0; r < ROUNDS; r++){
+  const row = r % 2 === 0 ? DRAFTERS : [...DRAFTERS].reverse();
+  order.push(...row);
+}
+const drafterFor = n => order[n-1];               // n is 1-indexed
+const pickNumber = (round, drafter) => {          // round 1-indexed
+  const row = round % 2 === 1 ? DRAFTERS : [...DRAFTERS].reverse();
+  return (round - 1) * DRAFTERS.length + row.indexOf(drafter) + 1;
+};
+
+const nextPick = (() => {
+  for (let n = 1; n <= ROUNDS * DRAFTERS.length; n++) if (!PICKS[n]) return n;
+  return null;
+})();
+
+// ---- on the clock ----
+const clock = document.getElementById("clock");
+if (nextPick){
+  const rd = Math.ceil(nextPick / DRAFTERS.length);
+  clock.innerHTML =
+    `<span class="lbl">On the clock</span>` +
+    `<span class="who" style="color:${COLORS[drafterFor(nextPick)]}">${drafterFor(nextPick)}</span>` +
+    `<span class="meta">pick ${nextPick} of 20 &middot; round ${rd}</span>`;
+} else {
+  clock.innerHTML = `<span class="lbl">Draft complete</span><span class="meta">all 20 picks in</span>`;
+}
+
+// ---- board ----
+const board = document.getElementById("board");
+let html = "<thead><tr><th class='rd'></th>";
+for (const d of DRAFTERS) html += `<th style="background:${COLORS[d]}">${d}</th>`;
+html += "</tr></thead><tbody>";
+
+for (let r = 1; r <= ROUNDS; r++){
+  html += `<tr><td class="rd">R${r}</td>`;
+  for (const d of DRAFTERS){
+    const n = pickNumber(r, d);
+    const who = PICKS[n];
+    const cls = ["cell", who ? "" : "empty", n === nextPick ? "next" : ""].join(" ");
+    html += `<td><div class="${cls}">` +
+            `<span class="pk">#${n}</span>` +
+            `<span class="name" ${who ? `style="color:${COLORS[d]}"` : ""}>${who || "—"}</span>` +
+            `</div></td>`;
+  }
+  html += "</tr>";
+}
+board.innerHTML = html + "</tbody>";
+
+// ---- pool: plain text, remaining only, ready to paste ----
+const taken = new Set(Object.values(PICKS));
+const remaining = CAST.filter(([name]) => !taken.has(name));
+const poolText = remaining.map(([name, occ]) => `${name} (${occ})`).join("\n");
+
+document.getElementById("pool").textContent = poolText;
+document.getElementById("avail-count").textContent =
+  `${remaining.length} of ${CAST.length}`;
+
+document.getElementById("copy").addEventListener("click", async (e) => {
+  const btn = e.currentTarget;
+  try {
+    await navigator.clipboard.writeText(poolText);
+  } catch {
+    const ta = document.createElement("textarea");   // file:// fallback
+    ta.value = poolText;
+    document.body.appendChild(ta);
+    ta.select();
+    document.execCommand("copy");
+    ta.remove();
+  }
+  btn.textContent = "Copied";
+  setTimeout(() => (btn.textContent = "Copy"), 1200);
+});
+</script>
+</body>
+</html>

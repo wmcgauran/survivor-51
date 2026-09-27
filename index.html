@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Survivor 51 Fantasy League</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🔥</text></svg>">
+<style>
+  :root{
+    --bg:#f3efe6; --panel:#fbf9f4; --head:#ece7dc; --ink:#23211d; --muted:#6d685e;
+    --line:#e0dacd; --rule:#2c2a26; --red:#b8321a; --green:#3d7a2c; --out:#a39d92;
+  }
+  *{box-sizing:border-box}
+  html,body{margin:0}
+  body{background:var(--bg);color:var(--ink);
+    font:16px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+
+  /* ---------- hero ---------- */
+  .hero{position:relative;text-align:center;color:#fff;padding:52px 16px 46px;
+    background:linear-gradient(100deg,#0d5c6e 0%,#1a4a5c 30%,#6b2418 68%,#c2410c 100%)}
+  .hero .kicker{font-size:13px;font-weight:700;letter-spacing:.3em;color:#f6c86a}
+  .hero h1{margin:10px 0 8px;font-size:clamp(34px,7vw,64px);font-weight:800;letter-spacing:-.01em;
+    line-height:1.05;color:#fff4ea;text-shadow:0 3px 18px rgba(0,0,0,.35)}
+  .hero .tag{font-size:clamp(12px,2.4vw,17px);font-weight:700;letter-spacing:.24em;color:#fff4ea}
+  .stripe{height:14px;background:
+    linear-gradient(45deg,transparent 35%,#1b1a17 35%,#1b1a17 65%,transparent 65%) 0 0/22px 14px,
+    linear-gradient(90deg,#e8590c,#e8590c 50%,#2a8ca0 50%,#2a8ca0) 0 0/44px 14px}
+
+  /* ---------- sections ---------- */
+  main{max-width:1080px;margin:0 auto;padding:12px 16px 64px}
+  section{padding:30px 0 26px;border-bottom:1px solid var(--line)}
+  section:last-child{border-bottom:none}
+  h2{margin:0 0 8px;font-size:15px;font-weight:800;letter-spacing:.16em;text-transform:uppercase;color:var(--red)}
+  h2 .ico{margin-right:6px}
+  .lede{margin:0 0 18px;color:var(--muted);font-size:14.5px}
+  h3{font-size:16px;margin:22px 0 10px}
+
+  .tbl{overflow-x:auto;-webkit-overflow-scrolling:touch}
+  table{width:100%;border-collapse:collapse;background:var(--panel)}
+  th{background:var(--head);font-size:11.5px;font-weight:700;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--muted);text-align:left;padding:12px;border-bottom:2px solid var(--rule);vertical-align:bottom}
+  td{padding:12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th.num,td.num{text-align:right;white-space:nowrap}
+  .rank{color:var(--muted);white-space:nowrap;width:60px}
+  .mgr{font-weight:700;white-space:nowrap}
+  .roster{color:var(--muted);font-size:14.5px}
+  .roster .out{text-decoration:line-through;color:var(--out)}
+  .alive{color:var(--green);font-weight:700}
+  .pts{color:var(--red);font-weight:800;font-variant-numeric:tabular-nums}
+  .plus{color:var(--green);font-weight:700}
+  .minus{color:var(--red);font-weight:700}
+
+  /* standings on phones: stack roster under the name */
+  @media (max-width:640px){
+    #standings .roster-cell{display:none}
+    #standings .roster-inline{display:block;margin-top:3px;font-weight:400;white-space:normal}
+    td,th{padding:10px 8px}
+  }
+  .roster-inline{display:none}
+
+  /* tribes */
+  .tribes{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:22px}
+  .tribe{background:var(--panel);border:1px solid var(--line);border-top:4px solid var(--c);padding:18px 22px 12px}
+  .tribe h4{margin:0;font-size:21px;display:flex;align-items:center;gap:9px}
+  .tribe h4::before{content:"";width:13px;height:13px;border-radius:50%;background:var(--c)}
+  .tribe .sub{font-size:12px;letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin:3px 0 10px}
+  .tribe ul{list-style:none;margin:0;padding:0}
+  .tribe li{padding:8px 0;border-bottom:1px dashed var(--line)}
+  .tribe li:last-child{border-bottom:none}
+  .tribe .aside{font-style:italic;color:var(--muted)}
+  .boots{margin-top:22px;background:var(--panel);border:1px solid var(--line);padding:16px 22px}
+  .boots h4{margin:0 0 6px;font-size:13px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
+  .boots ol{margin:0;padding-left:22px}
+
+  /* ownership */
+  .tname{font-weight:600}
+  tr.gone td{color:var(--out)}
+  tr.gone .cname{text-decoration:line-through}
+  tr.gone .tname{color:var(--out)!important}
+  .cname{font-weight:700}
+  .pk{color:var(--muted)}
+
+  /* rules */
+  .rulebox{background:var(--panel);border:1px solid var(--line);border-left:5px solid var(--green);
+    padding:14px 22px;margin-bottom:22px}
+  .rulebox ol{margin:0;padding-left:22px}
+  .rulebox li{margin:6px 0}
+  .notes{color:var(--muted);font-size:14.5px;padding-left:22px}
+  .notes li{margin:6px 0}
+
+  footer{text-align:center;color:var(--muted);font-size:13px;padding:0 16px 40px}
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="kicker">🌴 FANTASY LEAGUE 🌴</div>
+  <h1>🔥 SURVIVOR 51 🔥</h1>
+  <div class="tag">OUTWIT · OUTPLAY · OUTLAST</div>
+</header>
+<div class="stripe"></div>
+
+<main>
+  <section>
+    <h2><span class="ico">🏆</span>Standings</h2>
+    <p class="lede" id="standings-lede"></p>
+    <div class="tbl"><table id="standings"></table></div>
+  </section>
+
+  <section>
+    <h2><span class="ico">📜</span>Points Log</h2>
+    <p class="lede">Running audit trail of every point assigned, episode by episode. Castaway totals roll up into the ownership board and the standings above.</p>
+    <div id="log"></div>
+  </section>
+
+  <section>
+    <h2><span class="ico">🏝️</span>Current Tribes</h2>
+    <p class="lede" id="tribes-lede"></p>
+    <div class="tribes" id="tribes"></div>
+    <div class="boots" id="boots"></div>
+  </section>
+
+  <section>
+    <h2><span class="ico">🔥</span>Castaway Ownership Board</h2>
+    <p class="lede" id="own-lede"></p>
+    <div class="tbl"><table id="ownership"></table></div>
+  </section>
+
+  <section>
+    <h2><span class="ico">📜</span>Rules &amp; Point Values</h2>
+    <div class="rulebox"><ol>
+      <li>Each player drafts Survivor castaways to their team.</li>
+      <li>Throughout the season, each castaway earns points based on their performance in the game (see point values below).</li>
+      <li>At the end of the season, the team with the most points wins!</li>
+    </ol></div>
+    <div class="tbl"><table id="rules"></table></div>
+    <ul class="notes">
+      <li>An active immunity idol still in your pocket when you go home earns <b>no</b> points.</li>
+      <li>“Beware” advantages (shared idols that stay inactive until conditions are met and penalize the holder until activation) count as a <b>disadvantage (−5)</b> if the castaway is voted out before activation; once activated, they are treated as regular immunity idols.</li>
+    </ul>
+  </section>
+</main>
+<footer id="foot"></footer>
+
+<script src="data.js"></script>
+<script>
+const L = window.LEAGUE;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const ordinal = n => n + (["th","st","nd","rd"][(n % 100 - 20) % 10] || ["th","st","nd","rd"][n % 100] || "th");
+const signed = n => (n > 0 ? "+" : n < 0 ? "−" : "") + Math.abs(n);
+
+// ---- derived state ----
+const pts = Object.fromEntries(L.castaways.map(c => [c.name, 0]));
+for (const ep of L.episodes) for (const ev of ep.events) for (const w of ev.who) pts[w] += ev.pts;
+const booted = new Set(L.boots.map(b => b.name));
+const byName = Object.fromEntries(L.castaways.map(c => [c.name, c]));
+const owner = Object.fromEntries(L.draft.map(d => [d.castaway, d]));
+
+// ties share a rank and get a T prefix
+function ranked(rows, key){
+  rows.sort((a, b) => b[key] - a[key] || a.name.localeCompare(b.name));
+  rows.forEach((r, i) => {
+    const first = rows.findIndex(x => x[key] === r[key]);
+    const tied = rows.filter(x => x[key] === r[key]).length > 1;
+    r.rank = (tied ? "T" : "") + ordinal(first + 1);
+  });
+  return rows;
+}
+
+// ---- standings ----
+const teams = ranked(L.managers.map(m => {
+  const roster = L.draft.filter(d => d.manager === m).map(d => d.castaway);
+  return { name: m, roster,
+    alive: roster.filter(c => !booted.has(c)).length,
+    total: roster.reduce((s, c) => s + pts[c], 0) };
+}), "total");
+
+document.getElementById("standings-lede").textContent =
+  `Updated through episode ${L.updatedThrough}. Re-published each week as the season airs — every point assigned is logged in the Points Log below. Tied ranks are marked with a T (e.g. T2nd).`;
+
+const rosterHtml = r => r.map(c => `<span class="${booted.has(c) ? "out" : ""}">${esc(c)}</span>`).join(" · ");
+document.getElementById("standings").innerHTML =
+  `<thead><tr><th>#</th><th>Manager</th><th class="roster-cell">Tribe</th><th class="num">Alive 🏝️</th><th class="num">Pts 🔥</th></tr></thead><tbody>` +
+  teams.map(t => `<tr>
+    <td class="rank">${t.rank}</td>
+    <td class="mgr">${esc(t.name)}<span class="roster-inline roster">${rosterHtml(t.roster)}</span></td>
+    <td class="roster roster-cell">${rosterHtml(t.roster)}</td>
+    <td class="num alive">${t.alive}/${t.roster.length}</td>
+    <td class="num pts">${t.total}</td></tr>`).join("") + `</tbody>`;
+
+// ---- points log ----
+document.getElementById("log").innerHTML = L.episodes.map(ep => `
+  <h3>Episode ${ep.n}${ep.title ? " — " + esc(ep.title) : ""}</h3>
+  <div class="tbl"><table>
+    <thead><tr><th style="width:26%">Castaway(s)</th><th>Event</th><th class="num">Pts</th></tr></thead>
+    <tbody>${ep.events.map(ev => `<tr>
+      <td class="mgr" style="white-space:normal">${esc(ev.label)}</td>
+      <td>${esc(ev.event)}${ev.members ? ": " + ev.who.map(esc).join(" · ") : ""}</td>
+      <td class="num ${ev.pts < 0 ? "minus" : "plus"}">${signed(ev.pts)}</td></tr>`).join("")}
+    </tbody></table></div>`).join("");
+
+// ---- tribes ----
+const tribeNames = Object.keys(L.tribes);
+const active = tribeNames.filter(t => L.castaways.some(c => c.current === t || c.note?.includes(t)));
+document.getElementById("tribes-lede").textContent =
+  `Season 51 started with two tribes — Savu (purple buff) and Toka (yellow buff). This section is updated whenever tribes change (swaps, merges).`;
+document.getElementById("tribes").innerHTML = active.map(t => {
+  const members = L.castaways.filter(c => c.current === t).map(c => c.name).sort();
+  const asides = L.castaways.filter(c => c.current && c.current !== t && !L.tribes[c.current] && c.note?.includes(t));
+  return `<div class="tribe" style="--c:${L.tribes[t].color}">
+    <h4>${esc(t)}</h4>
+    <div class="sub">${esc(L.tribes[t].buff)} · ${members.length} castaways</div>
+    <ul>${members.map(m => `<li>${esc(m)}</li>`).join("")}
+      ${asides.map(a => `<li class="aside">${esc(a.name)} — ${esc(a.note)}.</li>`).join("")}</ul></div>`;
+}).join("");
+document.getElementById("boots").innerHTML = `<h4>🥾 Boot order</h4>` + (L.boots.length
+  ? `<ol>${L.boots.map(b => `<li><b>${esc(b.name)}</b> — ${esc(b.how)}, episode ${b.episode}${b.tribe ? ` (${esc(b.tribe)})` : ""}</li>`).join("")}</ol>`
+  : `<p class="lede" style="margin:0">Nobody yet.</p>`);
+
+// ---- ownership board ----
+const undrafted = L.castaways.filter(c => !owner[c.name]).map(c => c.name);
+document.getElementById("own-lede").textContent =
+  `All ${L.castaways.length} castaways and who drafted them (pick #).` +
+  (undrafted.length ? ` Went undrafted: ${undrafted.join(", ")}.` : "") +
+  ` Sorted by points, most to least; voted-out castaways are greyed out.`;
+const tribeCell = t => t && L.tribes[t]
+  ? `<span class="tname" style="color:${L.tribes[t].color}">${esc(t)}</span>`
+  : `<span class="pk">${esc(t)}</span>`;
+const castRows = L.castaways.map(c => ({ ...c, total: pts[c.name], out: booted.has(c.name) }))
+  .sort((a, b) => a.out - b.out || b.total - a.total || a.name.localeCompare(b.name));
+document.getElementById("ownership").innerHTML =
+  `<thead><tr><th>Castaway</th><th>Drafted by</th><th>Original tribe</th><th>Current tribe</th><th class="num">Pts 🔥</th></tr></thead><tbody>` +
+  castRows.map(c => {
+    const o = owner[c.name], b = L.boots.find(x => x.name === c.name);
+    const cur = c.out ? `<span class="pk">${b.how[0].toUpperCase() + b.how.slice(1)} (Ep ${b.episode})</span>` : tribeCell(c.current);
+    return `<tr class="${c.out ? "gone" : ""}">
+      <td class="cname">${esc(c.name)}</td>
+      <td>${o ? `${esc(o.manager)} <span class="pk">#${o.pick}</span>` : `<i class="pk">undrafted</i>`}</td>
+      <td>${tribeCell(c.original)}</td>
+      <td>${cur}</td>
+      <td class="num pts">${c.total}</td></tr>`;
+  }).join("") + `</tbody>`;
+
+// ---- rules table ----
+const RULES = [
+  ["Boot order", "each week a castaway survives <span class='pk'>(first person voted out gets 0, second gets 1, etc.)</span>", "+1 / wk"],
+  ["Tribal / group reward", "each member of a tribe (or other grouping) that wins reward", "+2"],
+  ["Tribal immunity", "each member of a tribe that wins immunity", "+2"],
+  ["Individual reward", "winning an individual reward", "+5"],
+  ["Shared reward", "each recipient when an individual reward winner shares it", "+2"],
+  ["Individual immunity", "winning individual immunity", "+5"],
+  ["Finding an idol or advantage", "finding or otherwise obtaining one (e.g. extra vote)", "+5"],
+  ["Correctly playing an idol", "the play stops someone from going home", "+5"],
+  ["Correctly playing Shot in the Dark", "it stops the player from going home", "+5"],
+  ["Finding / earning a disadvantage", "e.g. losing a vote", "−5"],
+  ["Final four firemaking", "winning the firemaking showdown", "+5"],
+  ["Making the jury", "bonus for every jury member", "+10"],
+  ["3rd place", "bonus", "+15"],
+  ["2nd place", "runner-up bonus", "+25"],
+  ["1st place", "the Sole Survivor bonus", "+50"],
+];
+document.getElementById("rules").innerHTML =
+  `<thead><tr><th>Event</th><th class="num">Points</th></tr></thead><tbody>` +
+  RULES.map(([k, d, p]) => `<tr><td><b>${k}</b> — ${d}</td><td class="num ${p.startsWith("−") ? "minus" : "plus"}">${p}</td></tr>`).join("") +
+  `</tbody>`;
+
+document.getElementById("foot").textContent = `${L.season} · Allison · Will · Mom · Dad`;
+</script>
+</body>
+</html>
