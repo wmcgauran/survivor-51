@@ -4,7 +4,7 @@
 
 window.LEAGUE = {
   season: "Survivor 51",
-  updatedThrough: 1,
+  updatedThrough: 2,
 
   managers: ["Allison", "Will", "Mom", "Dad"],
 
@@ -43,7 +43,7 @@ window.LEAGUE = {
     { name: "Aaliyah Puglia",           original: "Toka", current: null },
     { name: "Alexis Levine",            original: "Savu", current: "Savu" },
     { name: 'An "Thien An" Nguyen',     original: "Toka", current: "Toka" },
-    { name: "Ana Sani",                 original: "Savu", current: "Savu" },
+    { name: "Ana Sani",                 original: "Savu", current: null },
     { name: 'Angelica "Jelly" Loblack', original: "Toka", current: "Toka" },
     { name: "Brady Booker",             original: "Toka", current: "Toka" },
     { name: "Carter Krull",             original: "Savu", current: "Savu" },
@@ -53,8 +53,7 @@ window.LEAGUE = {
     { name: "Eric Macksoud",            original: "Savu", current: "Savu" },
     { name: "Jenna Doore",              original: "Toka", current: "Toka" },
     { name: "Kristin Flickinger",       original: "Savu", current: "Savu" },
-    { name: "Lewis Kelly",              original: "Toka", current: "Exile Island",
-      note: "on Exile Island, not yet on Toka" },
+    { name: "Lewis Kelly",              original: "Toka", current: "Toka" },
     { name: "Linnea Capobianco",        original: "Savu", current: "Savu" },
     { name: "Maggie Nestor",            original: "Toka", current: "Toka" },
     { name: "Mike Pinsky",              original: "Toka", current: "Toka" },
@@ -67,6 +66,7 @@ window.LEAGUE = {
   // Boot order, in order. how: "voted out" | "medevac" | "quit" | ...
   boots: [
     { name: "Aaliyah Puglia", episode: 1, how: "voted out", tribe: "Toka" },
+    { name: "Ana Sani",       episode: 2, how: "voted out", tribe: "Savu" },
   ],
 
   // Points log: only points actually assigned. Each event gives `pts` to every name in `who`.
@@ -85,6 +85,30 @@ window.LEAGUE = {
         { label: "All 20 remaining castaways", survival: true, pts: 1,
           event: "Survived week 1, boot order (+1 each) — everyone except Aaliyah Puglia",
           who: ["Alexis Levine", 'An "Thien An" Nguyen', "Ana Sani", 'Angelica "Jelly" Loblack',
+                "Brady Booker", "Carter Krull", "Cristian Chavez", 'Danny "Kilby" Kilby',
+                "Devin Way", "Eric Macksoud", "Jenna Doore", "Kristin Flickinger", "Lewis Kelly",
+                "Linnea Capobianco", "Maggie Nestor", "Mike Pinsky", "Ori Jean-Charles",
+                "Patt Cannaday", "Rob Antonson", "Sharonda Cox"] },
+      ],
+    },
+    {
+      n: 2,
+      events: [
+        { label: "Toka — all 10 members", members: true, pts: 2,
+          event: "Won tribal reward (+2 each)",
+          who: ['An "Thien An" Nguyen', 'Angelica "Jelly" Loblack', "Brady Booker", 'Danny "Kilby" Kilby',
+                "Devin Way", "Jenna Doore", "Lewis Kelly", "Maggie Nestor", "Mike Pinsky",
+                "Patt Cannaday"] },
+        { label: "Toka — all 10 members", members: true, pts: 2,
+          event: "Won tribal immunity (+2 each)",
+          who: ['An "Thien An" Nguyen', 'Angelica "Jelly" Loblack', "Brady Booker", 'Danny "Kilby" Kilby',
+                "Devin Way", "Jenna Doore", "Lewis Kelly", "Maggie Nestor", "Mike Pinsky",
+                "Patt Cannaday"] },
+        { label: 'Angelica "Jelly" Loblack', who: ['Angelica "Jelly" Loblack'],
+          event: "Found a hidden immunity idol", pts: 5 },
+        { label: "All 19 remaining castaways", survival: true, pts: 1,
+          event: "Survived week 2, boot order (+1 each) — everyone except Ana Sani",
+          who: ["Alexis Levine", 'An "Thien An" Nguyen', 'Angelica "Jelly" Loblack',
                 "Brady Booker", "Carter Krull", "Cristian Chavez", 'Danny "Kilby" Kilby',
                 "Devin Way", "Eric Macksoud", "Jenna Doore", "Kristin Flickinger", "Lewis Kelly",
                 "Linnea Capobianco", "Maggie Nestor", "Mike Pinsky", "Ori Jean-Charles",
