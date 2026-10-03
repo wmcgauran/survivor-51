@@ -111,20 +111,17 @@
 
   <section>
     <h2><span class="ico">📜</span>Points Log</h2>
-    <p class="lede">Running audit trail of every point assigned, episode by episode. Castaway totals roll up into the ownership board and the standings above.</p>
     <div id="log"></div>
   </section>
 
   <section>
     <h2><span class="ico">🏝️</span>Current Tribes</h2>
-    <p class="lede" id="tribes-lede"></p>
     <div class="tribes" id="tribes"></div>
     <div class="boots" id="boots"></div>
   </section>
 
   <section>
     <h2><span class="ico">🔥</span>Castaway Ownership Board</h2>
-    <p class="lede" id="own-lede"></p>
     <div class="tbl"><table id="ownership"></table></div>
   </section>
 
@@ -178,7 +175,7 @@ const teams = ranked(L.managers.map(m => {
 }), "total");
 
 document.getElementById("standings-lede").textContent =
-  `Updated through episode ${L.updatedThrough}. Re-published each week as the season airs — every point assigned is logged in the Points Log below. Tied ranks are marked with a T (e.g. T2nd).`;
+  `Updated through episode ${L.updatedThrough}.`;
 
 const rosterHtml = r => r.map(c => `<span class="${booted.has(c) ? "out" : ""}">${esc(c)}</span>`).join(" · ");
 document.getElementById("standings").innerHTML =
@@ -204,8 +201,6 @@ document.getElementById("log").innerHTML = L.episodes.map(ep => `
 // ---- tribes ----
 const tribeNames = Object.keys(L.tribes);
 const active = tribeNames.filter(t => L.castaways.some(c => c.current === t || c.note?.includes(t)));
-document.getElementById("tribes-lede").textContent =
-  `Season 51 started with two tribes — Savu (purple buff) and Toka (yellow buff). This section is updated whenever tribes change (swaps, merges).`;
 document.getElementById("tribes").innerHTML = active.map(t => {
   const members = L.castaways.filter(c => c.current === t).map(c => c.name).sort();
   const asides = L.castaways.filter(c => c.current && c.current !== t && !L.tribes[c.current] && c.note?.includes(t));
@@ -220,11 +215,6 @@ document.getElementById("boots").innerHTML = `<h4>🥾 Boot order</h4>` + (L.boo
   : `<p class="lede" style="margin:0">Nobody yet.</p>`);
 
 // ---- ownership board ----
-const undrafted = L.castaways.filter(c => !owner[c.name]).map(c => c.name);
-document.getElementById("own-lede").textContent =
-  `All ${L.castaways.length} castaways and who drafted them (pick #).` +
-  (undrafted.length ? ` Went undrafted: ${undrafted.join(", ")}.` : "") +
-  ` Sorted by points, most to least; voted-out castaways are greyed out.`;
 const tribeCell = t => t && L.tribes[t]
   ? `<span class="tname" style="color:${L.tribes[t].color}">${esc(t)}</span>`
   : `<span class="pk">${esc(t)}</span>`;
