@@ -219,7 +219,7 @@ const tribeCell = t => t && L.tribes[t]
   ? `<span class="tname" style="color:${L.tribes[t].color}">${esc(t)}</span>`
   : `<span class="pk">${esc(t)}</span>`;
 const castRows = L.castaways.map(c => ({ ...c, total: pts[c.name], out: booted.has(c.name) }))
-  .sort((a, b) => a.out - b.out || b.total - a.total || a.name.localeCompare(b.name));
+  .sort((a, b) => b.total - a.total || a.name.localeCompare(b.name));
 document.getElementById("ownership").innerHTML =
   `<thead><tr><th>Castaway</th><th>Drafted by</th><th>Original tribe</th><th>Current tribe</th><th class="num">Pts 🔥</th></tr></thead><tbody>` +
   castRows.map(c => {

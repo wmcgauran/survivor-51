@@ -26,6 +26,8 @@ all derived, so they can't drift from the points log.
 ## Standing rulings
 - Boot-order points start at 0 for the first boot (+1 per week survived).
 - Castaways on Exile Island still earn the weekly +1.
-- An active idol in your pocket when you go home: the +5 for finding it is removed.
+- An active idol in your pocket when you're voted out: the +5 for finding it is removed.
+  Leaving any other way (medevac, quit) doesn't trigger this, and nobody scores for being
+  given an idol (Rob kept his +5 and gave his idol to Carter, who earned nothing for it).
 - "Beware" advantages count as a disadvantage (−5) if the holder is voted out before activation.
 - Points Log shows only points actually assigned.
