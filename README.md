@@ -31,3 +31,6 @@ all derived, so they can't drift from the points log.
   given an idol (Rob kept his +5 and gave his idol to Carter, who earned nothing for it).
 - "Beware" advantages count as a disadvantage (−5) if the holder is voted out before activation.
 - Points Log shows only points actually assigned.
+- Jury +10 is awarded up front: when the first juror is voted out (Brady, episode 7), they and
+  everyone still in the game get +10 that week. At the finale, the 1st/2nd/3rd place bonuses are
+  each reduced by 10 (so +40 / +15 / +5 on top of the jury points already paid) to offset it.

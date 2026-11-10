@@ -4,7 +4,7 @@
 
 window.LEAGUE = {
   season: "Survivor 51",
-  updatedThrough: 6,
+  updatedThrough: 7,
 
   managers: ["Allison", "Will", "Mom", "Dad"],
 
@@ -37,31 +37,32 @@ window.LEAGUE = {
     Savu: { buff: "Purple buff", color: "#5b3fd6" },
     Toka: { buff: "Yellow buff", color: "#e0701b" },
     Dina: { buff: "Red buff",    color: "#c92a2a" },  // new at the episode 4 swap
+    Tovuto: { buff: "Blue buff", color: "#1971c2" },  // merge tribe, episode 7
   },
 
   // original = starting tribe. current = tribe name, "Exile Island", or null once out.
   castaways: [
     { name: "Aaliyah Puglia",           original: "Toka", current: null },
     { name: "Alexis Levine",            original: "Savu", current: null },
-    { name: 'An "Thien An" Nguyen',     original: "Toka", current: "Toka" },
+    { name: 'An "Thien An" Nguyen',     original: "Toka", current: "Tovuto" },
     { name: "Ana Sani",                 original: "Savu", current: null },
-    { name: 'Angelica "Jelly" Loblack', original: "Toka", current: "Savu" },
-    { name: "Brady Booker",             original: "Toka", current: "Toka" },
-    { name: "Carter Krull",             original: "Savu", current: "Toka" },
-    { name: "Cristian Chavez",          original: "Savu", current: "Dina" },
-    { name: 'Danny "Kilby" Kilby',      original: "Toka", current: "Dina" },
-    { name: "Devin Way",                original: "Toka", current: "Savu" },
-    { name: "Eric Macksoud",            original: "Savu", current: "Dina" },
+    { name: 'Angelica "Jelly" Loblack', original: "Toka", current: "Tovuto" },
+    { name: "Brady Booker",             original: "Toka", current: null },
+    { name: "Carter Krull",             original: "Savu", current: "Tovuto" },
+    { name: "Cristian Chavez",          original: "Savu", current: "Tovuto" },
+    { name: 'Danny "Kilby" Kilby',      original: "Toka", current: "Tovuto" },
+    { name: "Devin Way",                original: "Toka", current: "Tovuto" },
+    { name: "Eric Macksoud",            original: "Savu", current: "Tovuto" },
     { name: "Jenna Doore",              original: "Toka", current: null },
-    { name: "Kristin Flickinger",       original: "Savu", current: "Toka" },
-    { name: "Lewis Kelly",              original: "Toka", current: "Dina" },
+    { name: "Kristin Flickinger",       original: "Savu", current: "Tovuto" },
+    { name: "Lewis Kelly",              original: "Toka", current: "Tovuto" },
     { name: "Linnea Capobianco",        original: "Savu", current: null },
-    { name: "Maggie Nestor",            original: "Toka", current: "Toka" },
-    { name: "Mike Pinsky",              original: "Toka", current: "Toka" },
+    { name: "Maggie Nestor",            original: "Toka", current: "Tovuto" },
+    { name: "Mike Pinsky",              original: "Toka", current: "Tovuto" },
     { name: "Ori Jean-Charles",         original: "Savu", current: null },
     { name: "Patt Cannaday",            original: "Toka", current: null },
     { name: "Rob Antonson",             original: "Savu", current: null },
-    { name: "Sharonda Cox",             original: "Savu", current: "Dina" },
+    { name: "Sharonda Cox",             original: "Savu", current: "Tovuto" },
   ],
 
   // Boot order, in order. how: "voted out" | "medevac" | "quit" | ...
@@ -74,6 +75,7 @@ window.LEAGUE = {
     { name: "Alexis Levine",     episode: 5, how: "voted out", tribe: "Savu" },
     { name: "Linnea Capobianco", episode: 5, how: "voted out", tribe: "Dina" },
     { name: "Ori Jean-Charles",  episode: 6, how: "voted out", tribe: "Savu" },
+    { name: "Brady Booker",      episode: 7, how: "voted out", tribe: "Tovuto" },
   ],
 
   // Points log: only points actually assigned. Each event gives `pts` to every name in `who`.
@@ -202,6 +204,32 @@ window.LEAGUE = {
         { label: "All 13 remaining castaways", survival: true, pts: 1,
           event: "Survived week 6, boot order (+1 each) — everyone except Ori Jean-Charles",
           who: ['An "Thien An" Nguyen', 'Angelica "Jelly" Loblack', "Brady Booker", "Carter Krull",
+                "Cristian Chavez", 'Danny "Kilby" Kilby', "Devin Way", "Eric Macksoud",
+                "Kristin Flickinger", "Lewis Kelly", "Maggie Nestor", "Mike Pinsky",
+                "Sharonda Cox"] },
+      ],
+    },
+    {
+      n: 7, title: "merge",
+      events: [
+        { label: "Reward winners — all 10 members", members: true, pts: 2,
+          event: "Won group reward after the merge onto Tovuto (+2 each)",
+          who: ['An "Thien An" Nguyen', 'Angelica "Jelly" Loblack', "Brady Booker", "Carter Krull",
+                'Danny "Kilby" Kilby', "Devin Way", "Eric Macksoud", "Lewis Kelly",
+                "Maggie Nestor", "Mike Pinsky"] },
+        { label: "Mike Pinsky", who: ["Mike Pinsky"],
+          event: "Won individual immunity", pts: 5 },
+        // Jury +10 is paid up front to everyone still in when the jury starts; the 1st/2nd/3rd
+        // place bonuses get reduced by 10 at the finale to offset it (see README).
+        { label: "All 13 merged castaways", pts: 10,
+          event: "Made the jury (+10 each) — Brady Booker is the first juror, so he and everyone still in the game are guaranteed the jury bonus; the final three's placement bonuses will be reduced by 10 to offset it",
+          who: ['An "Thien An" Nguyen', 'Angelica "Jelly" Loblack', "Brady Booker", "Carter Krull",
+                "Cristian Chavez", 'Danny "Kilby" Kilby', "Devin Way", "Eric Macksoud",
+                "Kristin Flickinger", "Lewis Kelly", "Maggie Nestor", "Mike Pinsky",
+                "Sharonda Cox"] },
+        { label: "All 12 remaining castaways", survival: true, pts: 1,
+          event: "Survived week 7, boot order (+1 each) — everyone except Brady Booker",
+          who: ['An "Thien An" Nguyen', 'Angelica "Jelly" Loblack', "Carter Krull",
                 "Cristian Chavez", 'Danny "Kilby" Kilby', "Devin Way", "Eric Macksoud",
                 "Kristin Flickinger", "Lewis Kelly", "Maggie Nestor", "Mike Pinsky",
                 "Sharonda Cox"] },
