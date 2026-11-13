@@ -29,6 +29,8 @@ all derived, so they can't drift from the points log.
 - An active idol in your pocket when you're voted out: the +5 for finding it is removed.
   Leaving any other way (medevac, quit) doesn't trigger this, and nobody scores for being
   given an idol (Rob kept his +5 and gave his idol to Carter, who earned nothing for it).
+  Kristin kept her +5 for the Tethered Idol when she was voted out in episode 8: its rules
+  meant she couldn't play it for herself, so it wasn't an idol she could have saved herself with.
 - "Beware" advantages count as a disadvantage (−5) if the holder is voted out before activation.
 - Points Log shows only points actually assigned.
 - Jury +10 is awarded up front: when the first juror is voted out (Brady, episode 7), they and
