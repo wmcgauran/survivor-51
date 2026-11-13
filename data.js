@@ -4,7 +4,7 @@
 
 window.LEAGUE = {
   season: "Survivor 51",
-  updatedThrough: 7,
+  updatedThrough: 8,
 
   managers: ["Allison", "Will", "Mom", "Dad"],
 
@@ -50,11 +50,11 @@ window.LEAGUE = {
     { name: "Brady Booker",             original: "Toka", current: null },
     { name: "Carter Krull",             original: "Savu", current: "Tovuto" },
     { name: "Cristian Chavez",          original: "Savu", current: "Tovuto" },
-    { name: 'Danny "Kilby" Kilby',      original: "Toka", current: "Tovuto" },
+    { name: 'Danny "Kilby" Kilby',      original: "Toka", current: null },
     { name: "Devin Way",                original: "Toka", current: "Tovuto" },
     { name: "Eric Macksoud",            original: "Savu", current: "Tovuto" },
     { name: "Jenna Doore",              original: "Toka", current: null },
-    { name: "Kristin Flickinger",       original: "Savu", current: "Tovuto" },
+    { name: "Kristin Flickinger",       original: "Savu", current: null },
     { name: "Lewis Kelly",              original: "Toka", current: "Tovuto" },
     { name: "Linnea Capobianco",        original: "Savu", current: null },
     { name: "Maggie Nestor",            original: "Toka", current: "Tovuto" },
@@ -76,6 +76,8 @@ window.LEAGUE = {
     { name: "Linnea Capobianco", episode: 5, how: "voted out", tribe: "Dina" },
     { name: "Ori Jean-Charles",  episode: 6, how: "voted out", tribe: "Savu" },
     { name: "Brady Booker",      episode: 7, how: "voted out", tribe: "Tovuto" },
+    { name: 'Danny "Kilby" Kilby', episode: 8, how: "voted out", tribe: "Tovuto" },
+    { name: "Kristin Flickinger",  episode: 8, how: "voted out", tribe: "Tovuto" },
   ],
 
   // Points log: only points actually assigned. Each event gives `pts` to every name in `who`.
@@ -233,6 +235,27 @@ window.LEAGUE = {
                 "Cristian Chavez", 'Danny "Kilby" Kilby', "Devin Way", "Eric Macksoud",
                 "Kristin Flickinger", "Lewis Kelly", "Maggie Nestor", "Mike Pinsky",
                 "Sharonda Cox"] },
+      ],
+    },
+    {
+      n: 8,
+      events: [
+        { label: "Sharonda Cox · Lewis Kelly", who: ["Sharonda Cox", "Lewis Kelly"], pts: 5,
+          event: "Won individual immunity and reward in the same pairs challenge (+5 each, combined challenge scored once)" },
+        { label: 'Angelica "Jelly" Loblack · Kristin Flickinger', pts: 2,
+          who: ['Angelica "Jelly" Loblack', "Kristin Flickinger"],
+          event: "Shared reward, invited to share the pairs-challenge reward by its winners (+2 each)" },
+        { label: "Cristian Chavez", who: ["Cristian Chavez"],
+          event: "Obtained an Extra Vote advantage", pts: 5 },
+        { label: 'Angelica "Jelly" Loblack', who: ['Angelica "Jelly" Loblack'],
+          event: "Correctly played a hidden immunity idol", pts: 5 },
+        { label: "Cristian Chavez", who: ["Cristian Chavez"],
+          event: "Correctly played his Shot in the Dark (it saved him)", pts: 5 },
+        { label: "All 10 remaining castaways", survival: true, pts: 1,
+          event: 'Survived week 8, boot order (+1 each) — everyone except Danny "Kilby" Kilby and Kristin Flickinger',
+          who: ['An "Thien An" Nguyen', 'Angelica "Jelly" Loblack', "Carter Krull",
+                "Cristian Chavez", "Devin Way", "Eric Macksoud", "Lewis Kelly",
+                "Maggie Nestor", "Mike Pinsky", "Sharonda Cox"] },
       ],
     },
   ],
